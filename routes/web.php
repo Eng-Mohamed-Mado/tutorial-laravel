@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,24 +18,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-// Route System Closes if Today :"Mon"
-Route::get('/system-close',function()
-{
-    echo 'Today System-Closes in Monday ! ';
-});
-
-// Pass Parameter Id in Url
-Route::get('next-day/{user?}',function($user = null)
-{
-    echo 'Welcome To The Next Day '. $user ;
-});
-
-// Use Controller With Route and Pass Functions
-Route::get('contact-us',[App\Http\Controller\MainController::class,'index']);
-
-// Add Name Short
-Route::get('store-data',[App\Http\Controller\MainController::class,'storedata'])->name('data');
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// View Page Home
+Route::get('/home',[HomeController::class,'index'])->name('home');
+
+// View Page Create Project
+Route::get('/project/create',[ProjectController::class,'create'])->name('create-project');
+
+// Path Save New Project in Store
+Route::post('/project/store',[ProjectController::class,'store'])->name('save-project');
+// Page index Project
+Route::get('/project',[ProjectController::class,'index']);

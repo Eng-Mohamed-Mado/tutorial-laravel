@@ -12,7 +12,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        // Pass All Data from DB
+        $projects = Project::whrere('user_id',Auth::id())->get();
+        // Return Page Indexand Pass Variable
+        return view('project.index',compact('projects'));
     }
 
     /**
@@ -20,7 +23,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        // Return Page Create project
+        return view('project.create');
     }
 
     /**
@@ -28,7 +32,28 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Get Data In Create page And Save
+        // Test
+        //dd($request->all()); //Done
+
+
+        // Validate Data
+        request()->validate([
+            'title'=>'required',
+            'description'=> 'required'
+        ]);
+
+        // Send Data in DB
+        $project = new Project; // Object for Model
+        // obj  -> fieldDB = title Request for view
+        $project->title = $request->title;
+        $project->description = $request->description;
+        $project-> user_id = Auth::id();
+        // Save Project
+        $project->save();
+        // dd($project->all());
+        // After Save Data Redirect Page
+        return redirect('/project');
     }
 
     /**
