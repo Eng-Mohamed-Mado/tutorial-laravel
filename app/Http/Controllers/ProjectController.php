@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -13,7 +14,7 @@ class ProjectController extends Controller
     public function index()
     {
         // Pass All Data from DB
-        $projects = Project::whrere('user_id',Auth::id())->get();
+        $projects = Project::where('user_id',Auth::id())->get();
         // Return Page Indexand Pass Variable
         return view('project.index',compact('projects'));
     }
@@ -44,16 +45,13 @@ class ProjectController extends Controller
         ]);
 
         // Send Data in DB
-        $project = new Project; // Object for Model
-        // obj  -> fieldDB = title Request for view
-        $project->title = $request->title;
-        $project->description = $request->description;
-        $project-> user_id = Auth::id();
-        // Save Project
-        $project->save();
-        // dd($project->all());
+        $project = Project::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'user_id' => Auth::id(),]);
+         return 'echo Test';
         // After Save Data Redirect Page
-        return redirect('/project');
+        // return redirect('/project');
     }
 
     /**
@@ -61,7 +59,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        // Conditions Show Only Project
+        if($project->user_id == Auth::id()){
+            // Show Project Use ID
+            return view('project.show',compact('project'));
+        }
+        // Functions Show Error
+        abort(403); // Access Diana
     }
 
     /**
@@ -77,7 +81,15 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+       // Make Validate
+       request()->validate([
+        'status'=>'required'
+        ]);
+
+        $project->status =  $request->status;
+        $project->save();
+
+        return back();
     }
 
     /**

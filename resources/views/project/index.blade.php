@@ -21,7 +21,7 @@
                 <div class="col-4 mb-4">
                     <div class="card">
                         <div class="card-header">
-                            <h5>{{$project->title}}</h5>
+                            <a href="{{url('/project/',$project->id)}}">{{$project->title}}</a>
                         </div>
                         <div class="card-body">
                             <div>
