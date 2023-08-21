@@ -35,3 +35,6 @@ Route::get('contact-us',[App\Http\Controller\MainController::class,'index']);
 
 // Add Name Short
 Route::get('store-data',[App\Http\Controller\MainController::class,'storedata'])->name('data');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
